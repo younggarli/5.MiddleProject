@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="Project">
+
+	<typeAlias alias="ProjectVO" type="pcws.vo.ProjectVO"/>
+	<typeAlias alias="MemberVO" type="pcws.vo.MemberVO"/>
+	
+	<insert id="createPro" parameterClass="ProjectVO">
+	<selectKey keyProperty="pj_id"  resultClass="string" type="pre">select (#pj_id# || PJ_SEQ.NEXTVAL) from dual</selectKey>
+		insert into project(PJ_ID, PJ_NM, PJ_STR_DATE, PJ_END_DATE, pj_tag, pj_color) 
+		values(#pj_id#, #pj_nm#, #pj_str_date#, #pj_end_date#, #pj_tag#, #pj_color#)
+	</insert>
+	
+	<select id="chkProjectCount" parameterClass="String" resultClass="ProjectVO">
+		select * from project where pj_id like #mem_id#||'M%' and pj_bool='true'
+	</select>
+	
+	<update id="updatePro" parameterClass="ProjectVO">
+		update project
+		set	pj_nm = #pj_nm#, pj_str_date=#pj_str_date#, pj_end_date=#pj_end_date#,
+			pj_tag=#pj_tag#, pj_color=#pj_color#
+		where pj_id = #pj_id#
+	</update>
+	
+	<update id="deletePro" parameterClass="ProjectVO">
+		update project
+		set pj_bool='false'
+		where pj_id = #pj_id#
+	</update>
+	
+	<select id="getProject" parameterClass="MemberVO" resultClass="ProjectVO">
+		SELECT *
+		FROM project
+		WHERE pj_id =(SELECT MAX(pj_id)
+				FROM project
+				WHERE pj_id like #mem_id#||'M%')
+	</select> 
+	
+	<select id="getAllPro" resultClass="ProjectVO">
+		select * from project
+	</select>
+	
+	<select id="selectPro" parameterClass="String" resultClass="ProjectVO">
+		select * from project where pj_nm like '%' || #proNm# || '%'
+	</select>
+</sqlMap>
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+	
+<!--
+	namespace는 이곳에 설성된 SQL문을 호출해서 사용할 때 같이 사용되는 이름이다.
+	(자바에서는 package와 비슷한 역할을 한다.)
+-->
+<sqlMap namespace="Schedule">
+
+	<typeAlias alias="svo" type="pcws.vo.ScheduleVO"/>
+	
+	<insert id="insertSchedule" parameterClass="svo">
+		insert into schedule(SCDU_DATE, SCDU_MEMO, SCDU_MEM_ID) values(#scdu_date#, #scdu_memo#, #scdu_mem_id#)
+	</insert>
+	
+	<delete id="deleteSchedule" parameterClass="String">
+		delete from schedule where SCDU_DATE=#scdu_date#
+	</delete>
+	
+	<select id="showMemo" parameterClass="HashMap" resultClass="String">
+		select SCDU_MEMO from schedule where SCDU_DATE=#date# and SCDU_MEM_ID=#id#
+	</select>
+</sqlMap>
+
+
+
+
+
+
+
+
+
+
+
+
+

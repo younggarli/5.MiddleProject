@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="message">
+
+	<typeAlias alias="messageVo" type="pcws.vo.MessageVO"/>
+	
+	<!-- <select id="getMessage" resultClass="messageVo">
+		SELECT MSG_ID
+		      ,MSG_WT
+		      ,MSG_CONT
+		      ,MSG_TIT
+		      ,MSG_RECT 
+		FROM  MESSAGE, MEMBER
+		WHERE MEM_ID = MSG_RECT
+	</select>
+	
+	<insert id="create_Message" parameterClass="messageVo">
+		INSERT INTO MESSAGE (MSG_ID, MSG_WT, MSG_CONT, MSG_TIT, MSG_RECT)
+		VALUES ('M' || MSG_SEQ.NEXTVAL, #MSG_WT#, #MSG_CONT#, #MSG_TIT#, #MSG_RECT#)
+	</insert> -->
+	
+	<select id="showMsg" parameterClass="String" resultClass="messageVo">
+		SELECT ROWNUM AS num
+			  ,MSG_ID AS msg_id
+			  ,MSG_WT AS msg_wt
+			  ,MSG_CONT AS msg_cont
+			  ,MSG_RECT AS msg_rect
+			  ,MSG_DATE AS msg_date
+			  ,MSG_FILENM AS msg_filenm
+			  ,MSG_FILEPATH AS msg_filepath
+			  ,MSG_CHECK AS msg_check
+		FROM MESSAGE WHERE MSG_RECT LIKE '%' || #id# || '%'
+	</select>
+	
+	<insert id="sendMsg" parameterClass="HashMap">
+		insert into message(msg_id, msg_wt, msg_cont, msg_rect, msg_date, msg_filenm, msg_filepath) 
+		values(#writer# || 'M' || msg_seq2.nextval, #writer#, #msg#, #receiver#, to_char(sysdate,'yy/mm/dd'), #fileName#, #path#)
+	</insert>
+	
+	<select id="getID" parameterClass="HashMap" resultClass="String">
+		select msg_id from message where msg_wt=#writer# and msg_cont=#msg# and msg_rect=#receiver#
+	</select>
+	
+</sqlMap>
+

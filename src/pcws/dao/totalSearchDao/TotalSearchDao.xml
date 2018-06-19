@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="TotalSearchDao">
+
+	<typeAlias alias="ProjectVO" type="pcws.vo.ProjectVO"/>
+	<typeAlias alias="MemeberVO" type="pcws.vo.MemeberVO"/>
+	
+	<select id="memberSearch" parameterClass="String">
+		SELECT * FROM MEMBER WHERE MEM_ID = #mem_id#
+	</select>
+	
+	
+	<select id="projectSearch" parameterClass="String">
+		SELECT * FROM MEMBER WHERE PJ_ID = #pj_id#
+	</select>
+	
+</sqlMap>

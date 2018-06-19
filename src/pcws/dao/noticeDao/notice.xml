@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="notice">
+
+	<typeAlias alias="notaprmeVo" type="pcws.vo.NoTaPrMeVO"/>
+	
+	<select id="getAlarm_Task_Dday" resultClass="notaprmeVo" parameterClass="String">
+		SELECT ROWNUM AS num
+			  ,TASK_NM AS task_nm
+		      ,TO_CHAR(TASK_STR_DATE,'YYYY-MM-DD') AS task_str_date
+		      ,TO_CHAR(TASK_END_DATE,'YYYY-MM-DD') AS task_end_date
+		      ,TASK_IPT AS task_ipt
+		      ,TO_CHAR(NTC_DATE, 'YYYY-MM-DD') AS ntc_date 
+		FROM  TASK A, NOTICE B
+		WHERE A.TASK_NUM = B.NTC_TASK_NUM
+	</select>
+	
+	<select id="getAlarm_NewProject" resultClass="notaprmeVo" parameterClass="String">
+		SELECT ROWNUM AS num
+			  ,PJ_NM AS pj_nm
+			  ,NTC_NUM AS ntc_num
+		      ,TO_CHAR(PJ_STR_DATE,'YYYY-MM-DD') AS pj_str_date
+		      ,TO_CHAR(PJ_END_DATE,'YYYY-MM-DD') AS pj_end_date
+		      ,TO_CHAR(NTC_DATE, 'YYYY-MM-DD') AS ntc_date
+		FROM  PROJECT P, NOTICE N, TEAM T
+		WHERE PJ_ID = N.NTC_PJ_ID
+		AND PJ_ID=T.TM_PJ_ID
+		AND TM_MEM_ID = #ntc_pj_id#
+	</select>
+	
+	<select id="getAlarm_NewMessage" resultClass="notaprmeVo" parameterClass="String">
+		SELECT ROWNUM AS num
+			  ,NTC_NUM AS ntc_num
+		      ,MSG_CONT AS msg_cont
+			  ,MSG_RECT AS msg_rect
+		      ,MSG_WT AS msg_wt
+		      ,TO_CHAR(NTC_DATE, 'YYYY-MM-DD') AS ntc_date 
+		FROM  MESSAGE M, NOTICE N
+		WHERE M.MSG_ID = N.NTC_MSG_ID
+		AND M.MSG_RECT LIKE #ntc_msg_id# || '%'
+	</select>
+	
+	<delete id="Del_Alarm_Task" parameterClass="Integer">
+		delete from notice where ntc_num=#ntc_num#
+	</delete>
+	
+	<delete id="Del_Alarm_Project" parameterClass="Integer">
+		delete from notice where ntc_num=#ntc_num#
+	</delete>
+	
+	<delete id="Del_Alarm_Message" parameterClass="Integer">
+		delete from notice where ntc_num=#ntc_num#
+	</delete>
+	
+	<insert id="insertNotice" parameterClass="String">
+		insert into notice(ntc_num, ntc_date, ntc_pj_id)
+		values(NTC_SEQ.NEXTVAL, sysdate, (#pj_id#))
+	</insert>
+	
+	<insert id="insertMessage" parameterClass="String">
+		insert into notice(ntc_num, ntc_date, ntc_msg_id)
+		values(NTC_SEQ.NEXTVAL, sysdate, (#msg_id#))
+	</insert>
+	
+</sqlMap>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

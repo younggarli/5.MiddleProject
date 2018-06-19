@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Member">
+
+	<typeAlias alias="MemVO" type="pcws.vo.MemberVO"/>
+	
+	<select id="login" parameterClass="HashMap" resultClass="MemVO">
+		select * from member where mem_id=#mem_id# and mem_pw=#mem_pw# and mem_wdw != 'true'
+	</select>
+	
+	<select id="memberCheck" parameterClass="String" resultClass="String">
+		SELECT MEM_ID FROM MEMBER WHERE MEM_ID=#mem_id#
+	</select>
+	
+	<insert id="memberInsert" parameterClass="MemVO">
+		INSERT INTO MEMBER (MEM_ID, MEM_NM, MEM_GEN, MEM_EMAIL, MEM_BIRTH, MEM_TEL, MEM_ADMIN, MEM_WDW, MEM_PW)
+		VALUES (#mem_id#, #mem_nm#, #mem_gen#, #mem_email#, #mem_birth#, #mem_tel#,
+							#mem_admin#, #mem_wdw#, #mem_pw#)
+	</insert>
+	
+	<select id="memberIdSearch" parameterClass="MemVO" resultClass="String">
+		SELECT MEM_ID FROM MEMBER WHERE MEM_NM=#mem_nm# AND MEM_EMAIL=#mem_email# AND MEM_BIRTH=#mem_birth# AND MEM_ADMIN='false'
+	</select>
+	
+	<select id="memberPwSearch" parameterClass="MemVO" resultClass="String">
+		SELECT MEM_PW FROM MEMBER WHERE MEM_ID=#mem_id# AND MEM_EMAIL=#mem_email# AND MEM_TEL=#mem_tel#
+	</select>
+	
+	<select id="checkIdSearch" parameterClass="MemVO" resultClass="MemVO">
+		SELECT MEM_NM
+			  ,MEM_BIRTH
+			  ,MEM_EMAIL
+		FROM   MEMBER
+		WHERE  MEM_NM=#mem_nm# AND MEM_BIRTH=#mem_birth# AND MEM_EMAIL=#mem_email#
+	</select>
+	
+	<select id="checkPwSearch" parameterClass="MemVO" resultClass="MemVO">
+		SELECT MEM_ID
+			  ,MEM_TEL
+			  ,MEM_EMAIL
+		FROM   MEMBER
+		WHERE  MEM_ID=#mem_id# AND MEM_TEL=#mem_tel# AND MEM_EMAIL=#mem_email#
+	</select>
+	
+	<select id="searchAllMember" parameterClass="String" resultClass="MemVO">
+		SELECT MEM_NM AS mem_nm
+      		  ,MEM_ID AS mem_id
+      		  ,MEM_TEL AS mem_tel
+	    FROM   MEMBER
+		WHERE  MEM_ID LIKE '%' || #mem_id# || '%' OR MEM_NM LIKE '%' || #mem_id# || '%' OR MEM_EMAIL LIKE '%' || #mem_id# || '%' OR MEM_TEL LIKE '%' || #mem_id# || '%'
+	</select>
+	
+	<select id="searchGetMember" parameterClass="String" resultClass="MemVO">
+		SELECT * FROM MEMBER
+		WHERE MEM_ID=#memberInfo#
+	</select>
+
+	<update id="updateMemberPw" parameterClass="MemVO">
+		UPDATE MEMBER
+		SET    MEM_PW=#mem_pw#
+		WHERE  MEM_ID=#mem_id#
+	</update>
+	
+	<update id="memberOut" parameterClass="MemVO">
+		update  member 
+		set 	mem_wdw = 'true'
+		where   mem_id = #mem_id# 
+	</update>
+	
+	<select id="getAllmem" resultClass="MemVO">
+		select * from member where mem_id!='admin'
+	</select>
+	
+	<select id="searchMem" parameterClass="String" resultClass="MemVO">
+		select * from member where MEM_NM like '%' || #name# || '%'
+	</select>
+	
+	<update id="updateMember" parameterClass="MemVO">
+		update member
+		set    MEM_PW = #mem_pw#,
+			   MEM_NM = #mem_nm#,
+			   MEM_EMAIL = #mem_email#,
+			   MEM_TEL = #mem_tel#
+	 	where  MEM_ID = #mem_id#
+	</update>
+</sqlMap>
+

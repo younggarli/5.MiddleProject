@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+	
+<!--
+	namespace는 이곳에 설성된 SQL문을 호출해서 사용할 때 같이 사용되는 이름이다.
+	(자바에서는 package와 비슷한 역할을 한다.)
+-->
+<sqlMap namespace="Team">
+
+	<typeAlias alias="TeamVO" type="pcws.vo.TeamVO"/>
+	<typeAlias alias="ProjectVO" type="pcws.vo.ProjectVO"/>
+	
+	<insert id="createTeam" parameterClass="TeamVO">
+		insert into team(TM_ID, TM_PJ_ID, TM_MEM_ID) 
+		values(#tm_id#, #tm_pj_id#, #tm_mem_id#)
+	</insert>
+	
+	<select id="getAllTeam" parameterClass="ProjectVO" resultClass="TeamVO">
+		select * 
+		from team, member
+		where tm_pj_id = #pj_id#
+		and	mem_id = replace(tm_id,#pj_id#,'')
+	</select>
+	<!-- <select id="chkProjectCount" parameterClass="String" resultClass="ProjectVO">
+		select * from project where pj_id like #mem_id#||'M%'
+	</select>
+	
+	<update id="updatePro" parameterClass="ProjectVO">
+		update project
+		set	pj_nm = #pj_nm#, pj_str_date=#pj_str_date#, pj_end_date=#pj_end_date#,
+			pj_tag=#pj_tag#, pj_color=#pj_color#
+		where pj_id = #pj_id#
+	</update> -->
+	
+	<delete id="deleteTeam" parameterClass="TeamVO">
+		delete team
+		where tm_id = #tm_id#
+	</delete>
+</sqlMap>
+

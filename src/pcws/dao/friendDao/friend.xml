@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="friend">
+
+	<typeAlias alias="youandmeVo" type="pcws.vo.YouAndMeVO"/>
+	
+	<select id="getAllMember" resultClass="youandmeVo" parameterClass="String">
+		SELECT ROWNUM AS num, A.*
+		FROM   
+		(SELECT DISTINCT
+			   MEM_ID AS frd_id
+			  ,MEM_NM AS name
+			  ,MEM_TEL AS tel
+			  ,MEM_EMAIL AS email
+		FROM   MEMBER A, FRIEND B
+		WHERE  A.MEM_ID = B.FRD_ID
+		<isNotEqual compareValue="admin">
+		AND	   B.FRD_MEM_ID = #mem_id#  
+		</isNotEqual>
+		) A
+	</select>
+
+	<select id="getFriendSearch" resultClass="youandmeVo">
+		SELECT * FROM MEMBER
+		WHERE MEM_ID LIKE '%' || #mem_id# || '%'
+		OR	  MEM_NM LIKE '%' || #mem_nm# || '%'
+		OR	  MEM_TEL LIKE '%' || #mem_tel# || '%'
+	</select>
+	
+	<insert id="getFriend_Add" parameterClass="Map">
+		INSERT INTO FRIEND (FRD_REG_DATE,FRD_ID,FRD_MEM_ID)
+		VALUES (sysdate,#frd_id#,#frd_mem_id#)
+	</insert>
+	
+	<delete id="getFriend_Delete" parameterClass="Map">
+		DELETE FROM FRIEND
+		WHERE FRD_ID = #frd_id#
+		AND   FRD_MEM_ID = #frd_mem_id#
+	</delete>
+	
+</sqlMap>

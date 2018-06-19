@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="taskDao">
+
+	<typeAlias alias="taskVo" type="pcws.vo.TaskVO"/>
+	
+	<insert id="taskInsert" parameterClass="TaskVO">
+		INSERT INTO TASK (TASK_NUM, TASK_CONT, TASK_TAG, TASK_IPT, TASK_EPTN_TIME, 
+							TASK_MEM_ID, TASK_PJ_ID, TASK_COLOR_LBL, TASK_NM, 
+							TASK_STR_DATE, TASK_END_DATE)
+		VALUES (task_num.nextval, #task_cont#, #task_tag#, #task_ipt#, #task_eptn_time#, 
+				#task_mem_id#, #task_pj_id#, #task_color_lbl#, #task_nm#,
+				#task_str_date#, #task_end_date#)
+	</insert>
+	
+	<update id="taskUpdate" parameterClass="taskVo">
+	 	UPDATE TASK
+		SET TASK_STR_DATE=#task_str_date#, TASK_END_DATE=#task_end_date#, 
+			TASK_CONT=#task_cont#, TASK_IPT=#task_ipt#
+		WHERE TASK_NUM=#task_num#
+	</update>
+	
+	<delete id="taskDelete" parameterClass="String">
+		DELETE FROM TASK
+			   WHERE TASK_MEM_ID=#task_mem_id#
+	</delete>
+	
+	<select id="getTaskAll" resultClass="taskVo" parameterClass="String">
+		SELECT * FROM TASK WHERE TASK_MEM_ID=#task_mem_id#
+	</select>
+	
+	<select id="getTask" parameterClass="Integer" resultClass="taskVo">
+		SELECT * FROM TASK WHERE TASK_NUM=#task_num#
+	</select>
+	
+<!-- 
+	이 영역 안에서 사용할 SQL문에 맞는 태그를 사용하여 SQL문을 기술한다.
+	사용할 수 있는 기본 태그들..
+	<insert> SQL문장 ~~~ </insert>
+	<update> SQL문장 ~~~ </update>
+	<delete> SQL문장 ~~~ </delete>
+	<select> SQL문장 ~~~ </select>
+	등등...
+-->
+<!--
+	위 태그에서 사용되는 속성들
+	- id속성 : 해당 태그를 호출할 때 <sqlMap>태그의 namespace와 연결하여 사용하는 이름을 설정한다.
+	- parametClass속성 : SQL문장에 사용될 데이터가 들어있는 객체를 지정한다.
+	  (보통 VO클래스, 자바의 자료형이름 등이 사용된다.)
+	  (<typeAlias>태그에 지정한 alias명도 사용할 수 있다.)
+	- resultClass속성 : select문을 실행한 결과를 담을 객체를 지정한다.
+	  (VO클래스, 자바의 자료형이름, alias명 등을 사용할 수 있다.) 
+-->
+<!--
+	<insert id="memInsert" parameterClass="memVO2">
+		insert into mymember (mem_id, mem_name, mem_tel, mem_addr)
+		values (#mem_id#, #mem_name#, #mem_tel#, #mem_addr#)
+	</insert>
+	
+	<update id="memUpdate" parameterClass="memVO2">
+	 	update mymember set mem_name=#mem_name#, mem_tel=#mem_tel#, mem_addr=#mem_addr#
+	 	where mem_id=#mem_id#
+	</update>
+	
+	<delete id="memDelete" parameterClass="String">
+		delete from mymember where mem_id=#sss#
+	</delete>
+
+	<select id="getMemberAll" resultClass="memVO2">
+		select * from mymember
+	</select>
+	
+	<select id="getMember" parameterClass="String" resultClass="memVO2">
+		select * from mymember where mem_id=#mem_id#
+	</select>
+	
+	<select id="getMemberCount" parameterClass="String" resultClass="int">
+		select count(*) from mymember where mem_id=#mem_id#
+	</select>
+	
+			<isNotEmpty property="mem_addr">
+				mem_addr like '%' || #mem_addr# || '%'
+			</isNotEmpty>
+		</dynamic>
+	</select>
+-->
+</sqlMap>

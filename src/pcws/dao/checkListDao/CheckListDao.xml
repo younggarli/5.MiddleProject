@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CheckListDao">
+
+	<typeAlias alias="CheckListVO" type="pcws.vo.CheckListVO"/>
+	<typeAlias alias="TaskVO" type="pcws.vo.TaskVO"/>
+	<typeAlias alias="ProjectVO" type="pcws.vo.ProjectVO"/>
+	
+	<insert id="checkList_Insert" parameterClass="CheckListVO">
+		<selectKey keyProperty="chk_list_id"  resultClass="string" type="pre">
+			select (#chk_list_id#||CHK_SEQ.NEXTVAL) from dual
+		</selectKey>
+			
+		insert into checklist(CHK_LIST_ID,CHK_TASK_CONT, CHK_WTR, CHK_TASK_NUM,CHK_TASK_MEM)
+		values(#chk_list_id#, #chk_task_cont#, #chk_wtr#, CHK_SEQ.CURRVAL,#chk_task_mem#)
+	</insert>
+	<select id="checkList_Allget" parameterClass="String" resultClass="CheckListVO">
+		select * from checklist where CHK_LIST_ID like #pj_id#||'N%'
+	</select>
+	<update id="checkList_update" parameterClass="CheckListVO">
+		update checklist
+		set chk_wtr = #chk_wtr#
+		where chk_list_id=#chk_list_id#
+	</update>
+	
+	<delete id="checkList_Delete" parameterClass="CheckListVO">
+		delete from checklist
+			   where chk_list_id=#chk_list_id#
+	</delete>
+	
+	<select id="getChkList" parameterClass="ProjectVO" resultClass="Integer">
+	select count(*) from checklist where chk_list_id like #pj_id#||'N%' and chk_wtr='false'
+	</select>
+	
+	<select id="getNoNChkList" parameterClass="ProjectVO" resultClass="Integer">
+	select count(*) from checklist where chk_list_id like #pj_id#||'N%' and chk_wtr='true'
+	</select>
+</sqlMap>
